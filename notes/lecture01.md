@@ -140,11 +140,11 @@ All information online: https://stanford-cs336.github.io/spring2025/
         - Instruction data: (prompt, response) pairs & Example
         - Example:
             ```json
-            {
-                {role:"system", content:"You are a helpful assistant."},
-                {role:"user", content:"What is the capital of France?"}, 
-                {role: "assistant", content:"Paris."}
-            }
+            [
+                {"role" : "system", "content" : "You are a helpful assistant."},
+                {"role" : "user", "content" : "What is the capital of France?"}, 
+                {"role" :  "assistant", "content" : "Paris."}
+            ]
             ```
         - Preference data: 
         - Data: generate multiple responses using model (e.g., [A, B]) to a given prompt. 
@@ -152,13 +152,15 @@ All information online: https://stanford-cs336.github.io/spring2025/
         - Example:
             ```json
             {
-                {role:"system", content:"You are a helpful assistant."},
-                {role:"user", content:"What is the capital of France?"},
+                "messages": [
+                    {"role" : "system", "content" : "You are a helpful assistant."},
+                    {"role" : "user", "content" : "What is the capital of France?"}
+                ],
                 "reponse": {
-                    'a': "You shouldb'use a large dataset and train for a long time.", 
-                    'b': "You should use a small dataset and train for a short time."
+                    "a": "You shouldb'use a large dataset and train for a long time.", 
+                    "b": "You should use a small dataset and train for a short time."
                 }, 
-                "choice": 'a'
+                "choice": "a"
             }
             ```
         - Verifiers:
