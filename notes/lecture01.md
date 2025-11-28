@@ -138,11 +138,29 @@ All information online: https://stanford-cs336.github.io/spring2025/
         - Intuition: base model already has the skills, just need few examples to surface them.[link-lima](https://arxiv.org/pdf/2305.11206.pdf")
         - Supervised learning: fine-tune model to maximize p(response | prompt).
         - Instruction data: (prompt, response) pairs & Example
-        - Example:```{{role:"system", content:"You are a helpful assistant."}, {role:"user", content:"What is the capital of France?"}, {role: "assistant", content:"Paris."}}```
+        - Example:
+            ```json
+            {
+                {role:"system", content:"You are a helpful assistant."},
+                {role:"user", content:"What is the capital of France?"}, 
+                {role: "assistant", content:"Paris."}
+            }
+            ```
         - Preference data: 
         - Data: generate multiple responses using model (e.g., [A, B]) to a given prompt. 
         - User provides preferences (e.g., A < B or A > B).
-        - Example:```{{role:"system", content:"You are a helpful assistant."}, {role:"user", content:"What is the capital of France?"}, "reponse": {'a': "You shouldb'use a large dataset and train for a long time.", 'b': "You should use a small dataset and train for a short time."}, "choice": 'a'}```
+        - Example:
+            ```json
+            {
+                {role:"system", content:"You are a helpful assistant."},
+                {role:"user", content:"What is the capital of France?"},
+                "reponse": {
+                    'a': "You shouldb'use a large dataset and train for a long time.", 
+                    'b': "You should use a small dataset and train for a short time."
+                }, 
+                "choice": 'a'
+            }
+            ```
         - Verifiers:
         - Formal verifiers (e.g., for code, math)
         - Learned verifiers: train against an LM-as-a-judge
@@ -150,7 +168,7 @@ All information online: https://stanford-cs336.github.io/spring2025/
         - Proximal Policy Optimization (PPO) from reinforcement learning, [ppo_2017](https://arxiv.org/pdf/1707.06347.pdf), [instruct_gpt](https://arxiv.org/pdf/2203.02155.pdf)
         - Direct Policy Optimization (DPO): for preference data, simpler[link-dpo](https://arxiv.org/pdf/2305.18290.pdf)
         - Group Relative Preference Optimization (GRPO): remove value function[link-grpo](https://arxiv.org/pdf/2402.03300.pdf)
-4. Assignment-5
+1. Assignment-5
     1. [GitHub from 2024](https://github.com/stanford-cs336/spring2024-assignment5-alignment), [PDF from 2024](https://github.com/stanford-cs336/spring2024-assignment5-alignment/blob/master/cs336_spring2024_assignment5_alignment.pdf)
     2. Implement supervised fine-tuning
     3. Implement Direct Preference Optimization (DPO)
@@ -168,6 +186,11 @@ All information online: https://stanford-cs336.github.io/spring2025/
 
 ## Tokenization
 
-BPE tokenizer
+BPE tokenizer pipeline:
+1. Tokenize into subwords
+2. Merge most frequent pairs of subwords
+3. Repeat until desired vocabulary size
+
+
 
 
