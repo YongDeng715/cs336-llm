@@ -1,6 +1,21 @@
 # Lecture-01 Introduction & Tokenizer
 
-[TOC]
+- [Lecture-01 Introduction \& Tokenizer](#lecture-01-introduction--tokenizer)
+  - [Current Landscape](#current-landscape)
+    - [Neural ingredinets](#neural-ingredinets)
+    - [Open Models \& Datasets](#open-models--datasets)
+    - [Today's frontier models](#todays-frontier-models)
+  - [Course Overview](#course-overview)
+    - [1. basics](#1-basics)
+    - [2. systems](#2-systems)
+    - [3. scaling laws](#3-scaling-laws)
+    - [4. data](#4-data)
+    - [5. alignment](#5-alignment)
+    - [Assignments](#assignments)
+  - [Tokenization(分词器)](#tokenization分词器)
+    - [Intro](#intro)
+    - [BPE Tokenizer](#bpe-tokenizer)
+
 
 ## Current Landscape
 
@@ -11,9 +26,11 @@
 
 ### Open Models & Datasets
 
-- Open-source models (e.g., [OLMo](https://arxiv.org/pdf/2402.00838.pdf)): weights and data available, paper with most details (but not necessarily the rationale, failed experiments)
 - Open-weight models (e.g., DeepSeek): weights available, paper with architecture details, some training details, no data details
   - [deepseek-v3](https://arxiv.org/pdf/2412.19437.pdf)
+- Open-source models (e.g., [OLMo](https://arxiv.org/pdf/2402.00838.pdf)): weights and data available, paper with most details (but not necessarily the rationale, failed experiments)
+
+Open-weight models（比如 DeepSeek）, Open-source models（比如 OLMo），前者公开模型权重，架构细节，但只提供部分训练细节，没有数据细节；而后者基本全部都公开，但也没有提供训练过程的失败案例
 
 ### Today's frontier models
 
@@ -187,8 +204,31 @@ All information online: https://stanford-cs336.github.io/spring2025/
 - AI tools (e.g., CoPilot, Cursor) can take away from learning, so use at your own risk.
 
 
-## Tokenization
+## Tokenization(分词器)
 
+### Intro
+
+原始文本是一串使用 Unicode 编码的字符。而语言模型的输出是在一系列 token 表上的概率分布。
+
+因此我们需要一个分词器将字符串编码(encode)为 token，以及将 token 解码(decode)为字符串。词汇表大小 vocabulary size 指的就是所有可能 token 的个数
+
+![Tokenization visualization](../images/tokenized-example.png "tokenization example")
+
+可以通过该网站体验 gpt3 的 Tokenizer: [Link](https://tiktokenizer.vercel.app/?encoder=gpt3)
+
+有以下四种 tokenization 方法：
+1. 字符分词器(Character-based tokenization)。每个字符都对应 Unicode 编码中的一个编号，通过查表可以将将字符串编码为 tokens。每个 character 被转换成一个 code point（整数），这样对每种语言的处理都很方便，但问题：
+   1.  vocabulary size 太大
+   2.  有些 词汇(character) 不常用，使得字符表的使用效率很低
+2. 字节分词器(Byte-based tokenization)。Unicode 编码的文本可以表示为成字节序列，在 UTF-8 编码中，每个字符都被编码为 1~4 个字节长度。使用这个方案，所有的字符串都被编码为最大 255 token 序列。问题是有些 character 会被转换为 \xf0\x9f\x8c\x8d，序列太长，而 transformer 的上下文长度是有限的；
+3. 按词分类器(Word-based tokenization)。将字符串分割成单词，例如 `"Hello world"` 分为 `["Hello], " ", "world"]`，然后这个词集合映射到整数序列上。问题:
+   1. 字符表是相当有限的，无法编码碰到没见过的词；
+   2. 词表（字符表）可能变得巨大
+4. 字节对编码分类器, Byte Pair Encoding (BPE)。在 BPE 之前普遍用 word-base，之后从 GPT-2 开始使用 BPE。基本思想是在原始的文本上训练 tokenizer，自动确定 vocabulary，也就是常见的 vocabulary 用单一的 token 表示，很少出现的 vocabulary 用多个 token 表示。
+
+Andrej Karpathy's vedio on tokenization: [Link-YouTube](https://www.youtube.com/watch?v=zduSFxRajkE&list=PLVo9ePeLd0e-d-6lb8bj4GKmCgthSfc5C&index=2)
+
+### BPE Tokenizer
 BPE tokenizer pipeline:
 1. Tokenize into subwords
 2. Merge most frequent pairs of subwords
